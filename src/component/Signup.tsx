@@ -11,7 +11,7 @@ const Signup = () => {
                     <div className="wc-brand">
                         <div className="wc-logo">W</div>
                         <div>
-                            <h1 className="wc-title">WatchChap</h1>
+                            <h1 className="wc-title">WatchChatApp</h1>
                             <p className="wc-subtitle">Chat &amp; Chill with your watches</p>
                         </div>
                     </div>
