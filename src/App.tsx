@@ -5,6 +5,7 @@ import { Link, Route, Routes } from "react-router-dom";
 
 import Signup from "./component/Signup";
 import ChatApp from "./component/ChatApp";
+import Login from "./component/Login";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,7 +16,8 @@ function App() {
       <nav>
         <Link to="/" className="nav-link">Home</Link> |{" "}
         <Link to="/signup" className="nav-link">Signup</Link> |{" "}
-        <Link to="/chat" className="nav-link">ChatApp</Link> {/* ⬅️ Link mới */}
+        <Link to="/login" className="nav-link">Login</Link> |{" "}
+        <Link to="/chat" className="nav-link">ChatApp</Link> | {/* ⬅️ Link mới */}
       </nav>
 
       <Routes>
@@ -51,8 +53,13 @@ function App() {
         {/* Signup */}
         <Route path="/signup" element={<Signup />} />
 
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+
         {/* ChatApp (Trang Chat) */}
         <Route path="/chat" element={<ChatApp />} />
+
+
       </Routes>
     </>
   );
