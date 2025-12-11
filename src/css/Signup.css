@@ -1,14 +1,3 @@
-:root {
-    --wc-primary: #163e67; /* Yale Blue – màu chủ đạo */
-    --wc-primary-soft: #68aea6; /* Tropical Teal */
-    --wc-hero-dark: #084a52; /* Dark Teal */
-    --wc-cream: #e6efeb; /* Mint Cream */
-    --wc-text-main: #3a3d3f; /* Gunmetal */
-    --wc-radius-xl: 26px;
-    --wc-radius-lg: 18px;
-    --wc-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.18);
-}
-
 /* Layout chính */
 .wc-app {
     min-height: 100vh;

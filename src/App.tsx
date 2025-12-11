@@ -3,9 +3,9 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { Link, Route, Routes } from "react-router-dom";
 
-import Signup from "./component/Signup";
-import ChatApp from "./component/ChatApp";
-import Login from "./component/Login";
+import Signup from "./components/Signup";
+import ChatApp from "./components/ChatApp";
+import Login from "./components/Login";
 
 function App() {
   const [count, setCount] = useState(0);
