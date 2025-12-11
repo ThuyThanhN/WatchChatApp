@@ -1,7 +1,52 @@
 import "../css/Signup.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {useState} from "react";
 
 const Login = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const nhapLogin = (e) => {
+        e.preventDefault();
+
+        const ws = new WebSocket("wss://chat.longapp.site/chat/chat");
+
+        ws.onopen = () => {
+            // Nhận phản hồi
+            ws.onmessage = (event) => {
+                console.log("Server trả lời:", event.data);
+
+                const res = JSON.parse(event.data);
+
+                if (res.status === "success") {
+                    alert("Đăng nhập thành công!");
+
+                    // Lưu RE_LOGIN_CODE vào localStorage để dùng sau
+                    if (res.data?.RE_LOGIN_CODE) {
+                        localStorage.setItem("relogin_code", res.data.RE_LOGIN_CODE);
+                        localStorage.setItem("username", username);
+                    }
+                    // Qua chat
+                    navigate("/chat");
+                } else {
+                    alert("Đăng nhập thất bại: " + res.mes);
+                }
+            };
+
+            // Gửi login
+            ws.send(JSON.stringify({
+                action: "onchat",
+                data: {
+                    event: "LOGIN",
+                    data: {
+                        user: username,
+                        pass: password
+                    }
+                }
+            }));
+        };
+    };
     return (
         <div className="wc-app">
             <div className="wc-gradient-bg"></div>
@@ -12,21 +57,21 @@ const Login = () => {
                     <div className="wc-brand">
                         <div className="wc-logo">W</div>
                         <div>
-                            <h1 className="wc-title">WatchChatApp</h1>
-                            <p className="wc-subtitle">Chat &amp; Chill with your watches</p>
+                            <h1 className="wc-title">ChatApp</h1>
+                            <p className="wc-subtitle">Chat &amp; Chill with your friends</p>
                         </div>
                     </div>
 
                     <p className="wc-hero-text">
-                        Kết nối nhanh với người bán, hỏi đáp về đồng hồ, chốt đơn ngay trong
-                        khung chat. Tất cả hội thoại cho từng chiếc đồng hồ đều được lưu lại
+                        Kết nối nhanh với bạn bè, trao đổi ngay trong
+                        khung chat. Tất cả hội thoại đều được lưu lại
                         gọn gàng.
                     </p>
 
                     <div className="wc-hero-tags">
-                        <span>#LuxuryWatch</span>
-                        <span>#ChatToBuy</span>
-                        <span>#RealTimeSupport</span>
+                        <span>#Appchat</span>
+                        <span>#ChatWithFriend</span>
+                        <span>#RealTime</span>
                     </div>
 
                     {/* Mô phỏng khung chat mini */}
@@ -34,17 +79,17 @@ const Login = () => {
                         <div className="wc-chat-header">
                             <div className="wc-chat-avatar">S</div>
                             <div>
-                                <p className="wc-chat-name">Shop Premium Watch</p>
+                                <p className="wc-chat-name">User1</p>
                                 <p className="wc-chat-status">Đang hoạt động</p>
                             </div>
                         </div>
 
                         <div className="wc-chat-bubbles">
                             <div className="wc-bubble wc-bubble-left">
-                                Chiếc Omega Seamaster này còn bản mặt xanh không ạ?
+                                Hello
                             </div>
                             <div className="wc-bubble wc-bubble-right">
-                                Dạ còn 2 chiếc, tặng kèm dây da. Bạn đăng nhập để tiếp tục giao dịch.
+                                Hiiii
                             </div>
                         </div>
                     </div>
@@ -54,13 +99,17 @@ const Login = () => {
                 <section className="wc-auth-card">
                     <h2 className="wc-auth-title">Đăng nhập</h2>
                     <p className="wc-auth-desc">
-                        Đăng nhập để tiếp tục chat và săn deal đồng hồ xịn mịn.
+                        Đăng nhập để tiếp tục chat.
                     </p>
 
-                    <form className="wc-form">
+                    <form className="wc-form" onSubmit={nhapLogin}>
                         <div className="wc-form-group">
-                            <label htmlFor="email">Email</label>
-                            <input id="email" type="email" placeholder="you@example.com"/>
+                            <label htmlFor="username">Tên đăng nhập</label>
+                            <input
+                                id="username"
+                                type="text"
+                                placeholder="Tên đăng nhập"
+                                onChange={(e) => setUsername(e.target.value)}/>
                         </div>
 
                         <div className="wc-form-group">
@@ -69,6 +118,7 @@ const Login = () => {
                                 id="password"
                                 type="password"
                                 placeholder="Nhập mật khẩu"
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
 
