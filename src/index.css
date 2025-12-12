@@ -1,3 +1,12 @@
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --wc-primary: #163e67;
+  --wc-primary-soft: #68aea6;
+  --wc-hero-dark: #084a52;
+  --wc-cream: #e6efeb;
+  --wc-text-main: #3a3d3f;
+  --wc-radius-xl: 26px;
+  --wc-radius-lg: 18px;
+  --wc-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.18);
 }
