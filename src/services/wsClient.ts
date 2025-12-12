@@ -20,7 +20,7 @@ function onMessage(ev: MessageEvent) {
   console.log("📥 WebSocket message:", ev.data);
   try {
     const data = JSON.parse(ev.data);
-    if (subscriber) subscriber(data); // subscribe callback
+    if (subscriber) subscriber(data);
   } catch (e) {
     console.error("Lỗi:", e);
   }

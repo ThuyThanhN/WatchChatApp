@@ -12,7 +12,7 @@ export function getUserList() {
 
 // Gửi tin nhắn đến 1 người (type = "people")
 export function sendChatToPeople(to: string, mes: string) {
-  const request = {
+  sendJson({
     action: "onchat",
     data: {
       event: "SEND_CHAT",
@@ -22,8 +22,6 @@ export function sendChatToPeople(to: string, mes: string) {
         mes,
       },
     },
-  };
-
-  sendJson(request);
+  });
 }
 
