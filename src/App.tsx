@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { Link, Route, Routes } from "react-router-dom";
+import { getSocket } from "./services/wsClient";
 
 import Signup from "./pages/Signup";
 import ChatApp from "./pages/ChatApp";
@@ -10,14 +11,31 @@ import Login from "./pages/Login";
 function App() {
   const [count, setCount] = useState(0);
 
+  // Mở kết nối WebSocket khi App khởi động
+  useEffect(() => {
+    getSocket();
+  }, []);
+
   return (
     <>
       {/* Navigation nhỏ để chuyển trang */}
       <nav>
-        <Link to="/" className="nav-link">Home</Link> |{" "}
-        <Link to="/signup" className="nav-link">Signup</Link> |{" "}
-        <Link to="/login" className="nav-link">Login</Link> |{" "}
-        <Link to="/chat" className="nav-link">ChatApp</Link> | {/* ⬅️ Link mới */}
+        <Link to="/" className="nav-link">
+          Home
+        </Link>{" "}
+        |{" "}
+        <Link to="/signup" className="nav-link">
+          Signup
+        </Link>{" "}
+        |{" "}
+        <Link to="/login" className="nav-link">
+          Login
+        </Link>{" "}
+        |{" "}
+        <Link to="/chat" className="nav-link">
+          ChatApp
+        </Link>{" "}
+        | {/* ⬅️ Link mới */}
       </nav>
 
       <Routes>
@@ -31,7 +49,11 @@ function App() {
                   <img src={viteLogo} className="logo" alt="Vite logo" />
                 </a>
                 <a href="https://react.dev" target="_blank">
-                  <img src={reactLogo} className="logo react" alt="React logo" />
+                  <img
+                    src={reactLogo}
+                    className="logo react"
+                    alt="React logo"
+                  />
                 </a>
               </div>
               <h1>Vite + React</h1>
@@ -58,8 +80,6 @@ function App() {
 
         {/* ChatApp (Trang Chat) */}
         <Route path="/chat" element={<ChatApp />} />
-
-
       </Routes>
     </>
   );

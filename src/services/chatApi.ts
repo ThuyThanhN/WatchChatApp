@@ -1,5 +1,19 @@
 import { sendJson } from "./wsClient";
 
+// Đăng nhập
+export function login(username: string, password: string) {
+  sendJson({
+    action: "onchat",
+    data: {
+      event: "LOGIN",
+      data: {
+        user: username,
+        pass: password,
+      },
+    },
+  });
+}
+
 // Lấy danh sách người dùng chat
 export function getUserList() {
   sendJson({

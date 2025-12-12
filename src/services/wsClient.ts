@@ -12,21 +12,20 @@ function onClose() {
   console.log("WebSocket closed");
 }
 
-function onError(ev: Event) {
-  console.error("WebSocket error:", ev);
+function onError(event: Event) {
+  console.error("WebSocket error:", event);
 }
 
-function onMessage(ev: MessageEvent) {
-  console.log("📥 WebSocket message:", ev.data);
+function onMessage(event: MessageEvent) {
   try {
-    const data = JSON.parse(ev.data);
+    const data = JSON.parse(event.data);
     if (subscriber) subscriber(data);
   } catch (e) {
     console.error("Lỗi:", e);
   }
 }
 
-// Hàm tạo socket duy nhất (Singleton)
+// Hàm tạo socket duy nhất
 export function getSocket() {
   if (socket) return socket;
 
