@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getSocket, sendJson, subscribeMessage } from "../services/wsClient";
 import { sendChatToPeople, getUserList } from "../services/chatApi";
+import { createRoom } from "../services/roomApi";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import type { Message } from "../types/Message";
@@ -78,6 +79,22 @@ const ChatApp = () => {
     });
   }, []);
 
+  // Tạo phòng
+  const handleCreateRoom = (name: string) => {
+    createRoom(name);
+    const newRoom = {
+      name,
+      type: 1,
+      color: "#6ca0dc"
+    };
+    setConversations(prev => [...prev, newRoom]);
+
+    //chọn phòng vừa tạo
+    setSelected(newRoom);
+
+    console.log("Đã gửi yêu cầu tạo phòng:", name);
+  };
+
   return (
     <div className="chat-container">
       <div
@@ -87,12 +104,13 @@ const ChatApp = () => {
 
       {/* Sidebar */}
       <Sidebar
-        conversations={conversations}
-        selected={selected}
-        setSelected={setSelected}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        getAvatarGradient={getAvatarGradient}
+          conversations={conversations}
+          selected={selected}
+          setSelected={setSelected}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          getAvatarGradient={getAvatarGradient}
+          onCreateRoom={handleCreateRoom}
       />
 
       {/* Khu vực chat */}

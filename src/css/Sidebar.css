@@ -238,3 +238,46 @@
     max-width: 280px;
   }
 }
+
+/* UI tạo phòng */
+.add-room-btn {
+  position: absolute;
+  right: 22px;
+  top: 17px;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-room-btn:hover {
+  background: #163E674C;
+}
+.create-room-popup{
+  margin-left: 50px;
+  margin-bottom: 20px;
+
+}
+.create-room-popup input {
+  flex: 1;
+  padding: 8px;
+  outline: none;
+  border-top: none;
+  border-right: none;
+  border-bottom: solid 1px #163E674C ;
+}
+
+.create-room-popup button {
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background: #001f46;
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+}
