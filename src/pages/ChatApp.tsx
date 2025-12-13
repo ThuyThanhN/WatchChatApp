@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getSocket, sendJson, subscribeMessage } from "../services/wsClient";
+import { getSocket, subscribeMessage } from "../services/wsClient";
 import { sendChatToPeople, getUserList } from "../services/chatApi";
-import { createRoom } from "../services/roomApi";
+import { createRoom,sendChatToRoom } from "../services/roomApi";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import type { Message } from "../types/Message";
@@ -39,7 +39,13 @@ const ChatApp = () => {
   const handleSend = () => {
     if (!inputText.trim() || !selected) return;
 
-    sendChatToPeople(selected.name, inputText);
+    if (selected.type === 1) {
+      // Gửi tin nhắn phòng
+      sendChatToRoom(selected.name, inputText);
+    } else {
+      // Gửi tin nhắn cá nhân
+      sendChatToPeople(selected.name, inputText);
+    }
 
     setMessages((prev) => [
       ...prev,
