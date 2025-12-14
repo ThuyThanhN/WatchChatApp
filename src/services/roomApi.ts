@@ -1,6 +1,6 @@
-// Tạo phòng
 import {sendJson} from "./wsClient.ts";
 
+//Tạo phòng
 export function createRoom(name: string){
     sendJson({
         "action": "onchat",
@@ -11,4 +11,18 @@ export function createRoom(name: string){
             }
         }
     })
+}
+// Gửi tin nhắn vào phòng
+export function sendChatToRoom(to: string, mes: string) {
+    sendJson({
+        action: "onchat",
+        data: {
+            event: "SEND_CHAT",
+            data: {
+                type: "room",
+                to,
+                mes,
+            },
+        },
+    });
 }
