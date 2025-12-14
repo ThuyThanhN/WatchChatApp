@@ -20,7 +20,7 @@
 
 
 .sidebar {
-  width: 320px;
+  width: 360px;
   background: white;
   display: flex;
   flex-direction: column;
@@ -30,8 +30,18 @@
 }
 
 .sidebar-header {
+  display: flex;
+  justify-content: space-between;
   padding: 24px 24px 16px;
   border-bottom: 1px solid var(--wc-cream);
+}
+
+.sidebar-header img {
+  cursor: pointer;
+}
+
+.sidebar-header img:first-child {
+  padding-right: 15px;
 }
 
 .sidebar-header h1 {
@@ -211,7 +221,6 @@
   box-shadow: 0 2px 4px rgba(22, 62, 103, 0.3);
 }
 
-
 @media (max-width: 768px) {
   .chat-container {
     flex-direction: column;
@@ -219,12 +228,11 @@
 
   .sidebar {
     position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 280px;
+    inset: 0;                 
+    width: 100vw;            
+    height: 100vh;           
     transform: translateX(-100%);
-    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+    z-index: 100;
   }
 
   .sidebar.open {
@@ -232,52 +240,9 @@
   }
 }
 
-@media (max-width: 480px) {
-  .sidebar {
-    width: 100%;
-    max-width: 280px;
-  }
-}
-
-/* UI tạo phòng */
-.add-room-btn {
-  position: absolute;
-  right: 22px;
-  top: 17px;
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.add-room-btn:hover {
-  background: #163E674C;
-}
-.create-room-popup{
-  margin-left: 50px;
-  margin-bottom: 20px;
-
-}
-.create-room-popup input {
-  flex: 1;
-  padding: 8px;
-  outline: none;
-  border-top: none;
-  border-right: none;
-  border-bottom: solid 1px #163E674C ;
-}
-
-.create-room-popup button {
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-  color: white;
-  background: #001f46;
-  width: 30px;
-  height: 30px;
-  margin-left: 20px;
+/* UI tạo phòng và tham gia phòng */
+.btn-create-room,
+.btn-join-room {
+  background: linear-gradient(135deg, var(--wc-primary) 0%, var(--wc-hero-dark) 100%);
+  color: white !important;
 }

@@ -26,3 +26,16 @@ export function sendChatToRoom(to: string, mes: string) {
         },
     });
 }
+
+// Tham gia phòng chat (type = "room")
+export function joinRoom(name: string) {
+  sendJson({
+    action: "onchat",
+    data: {
+      event: "JOIN_ROOM",
+      data: {
+        name
+      }
+    }
+  });
+}

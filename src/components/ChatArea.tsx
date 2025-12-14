@@ -15,7 +15,7 @@ type Props = {
   getAvatarGradient: (color: string) => string;
 };
 
-const ChatWindow = ({
+const ChatArea = ({
   selected,
   messages,
   inputText,
@@ -98,4 +98,4 @@ const ChatWindow = ({
   );
 };
 
-export default ChatWindow;
+export default ChatArea;
