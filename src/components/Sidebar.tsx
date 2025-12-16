@@ -2,6 +2,8 @@ import "../css/Sidebar.css";
 import { Search } from "lucide-react";
 import type { Conversation } from "../types/Conversation";
 import { useState } from "react";
+import createRoomLogo from "../assets/group.png";
+import joinRoomLogo from "../assets/chat.png";
 
 type Props = {
   conversations: Conversation[];
@@ -11,6 +13,7 @@ type Props = {
   setSidebarOpen: (v: boolean) => void;
   getAvatarGradient: (hsl: string) => string;
   onCreateRoom: (name: string) => void;
+  onJoinRoom: (name: string) => void;
 };
 
 const Sidebar = ({
@@ -21,35 +24,167 @@ const Sidebar = ({
   setSidebarOpen,
   getAvatarGradient,
   onCreateRoom,
+  onJoinRoom,
 }: Props) => {
   const [roomName, setRoomName] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [showJoin, setShowJoin] = useState(false);
 
   const create = () => {
-        if (!roomName.trim()) return;
-        onCreateRoom(roomName.trim()); // gọi API
-        setRoomName("");
-        setShowCreate(false);
-    };
+    if (!roomName.trim()) return;
+    onCreateRoom(roomName.trim()); // gọi API
+    setRoomName("");
+    setShowCreate(false);
+  };
+
+  const join = () => {
+    if (!roomName.trim()) return;
+    onJoinRoom(roomName.trim());
+    setRoomName("");
+    setShowJoin(false);
+  };
   return (
     <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
       <div className="sidebar-header">
-        <h1>Watch Chat</h1>
+        <div>
+          <h1>Watch Chat App</h1>
+        </div>
+        <div>
+          <img
+            title="Tạo phòng mới"
+            src={createRoomLogo}
+            alt="Create Room"
+            onClick={() => setShowCreate(!showCreate)}
+          />
+          <img
+            title="Tham gia phòng"
+            src={joinRoomLogo}
+            className="Logo Join Room"
+            alt="Join Room"
+            onClick={() => setShowJoin(true)}
+          />
+        </div>
       </div>
 
-        <div className="search-container">
-            <Search size={18} className="search-icon"/>
-            <input className="search-input" placeholder="Tên người dùng..."/>
-            <button className="add-room-btn" onClick={() => setShowCreate(!showCreate)}> + </button>
-        </div>
+      <div className="search-container">
+        <Search size={18} className="search-icon" />
+        <input className="search-input" placeholder="Tên người dùng..." />
+      </div>
 
-        {/* UI tạo phòng */}
-        {showCreate && (
-            <div className="create-room-popup" >
-                <input placeholder="Tên phòng..." value={roomName} onChange={(e) => setRoomName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && create()}/>
-                <button onClick={create}>Tạo</button>
+      {/* UI tạo phòng */}
+      {showCreate && (
+        <>
+          <div className="modal-backdrop fade show"></div>
+
+          <div className="modal fade show d-block" tabIndex={-1}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content rounded-4">
+                {/* Header */}
+                <div className="modal-header border-0">
+                  <div>
+                    <h5 className="modal-title fw-bold">Tạo phòng mới</h5>
+                    <small className="text-muted">
+                      Nhập tên phòng mới bạn muốn tạo
+                    </small>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setShowCreate(false)}
+                  />
+                </div>
+
+                {/* Body */}
+                <div className="modal-body pt-0">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Tên phòng..."
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && create()}
+                    autoFocus
+                  />
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer border-0">
+                  <button
+                    className="btn btn-danger px-4"
+                    onClick={() => setShowCreate(false)}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    className="btn btn-create-room px-4"
+                    onClick={create}
+                    disabled={!roomName.trim()}
+                  >
+                    Tạo phòng
+                  </button>
+                </div>
+              </div>
             </div>
-        )}
+          </div>
+        </>
+      )}
+
+      {/* UI tham gia phòng */}
+      {showJoin && (
+        <>
+          <div className="modal-backdrop fade show"></div>
+          <div className="modal fade show d-block" tabIndex={-1}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content rounded-4">
+                {/* Header */}
+                <div className="modal-header border-0">
+                  <div>
+                    <h5 className="modal-title fw-bold">Tham gia phòng</h5>
+                    <small className="text-muted">
+                      Nhập tên phòng bạn muốn tham gia
+                    </small>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setShowJoin(false)}
+                  />
+                </div>
+
+                {/* Body */}
+                <div className="modal-body pt-0">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Tên phòng..."
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && join()}
+                    autoFocus
+                  />
+                </div>
+
+                {/* Footer */}
+                <div className="modal-footer border-0">
+                  <button
+                    className="btn btn-danger px-4"
+                    onClick={() => setShowJoin(false)}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    className="btn btn-join-room px-4"
+                    onClick={join}
+                    disabled={!roomName.trim()}
+                  >
+                    Tham gia
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="conversation-list">
         {conversations.map((c) => (

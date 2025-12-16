@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getSocket, subscribeMessage } from "../services/wsClient";
 import { sendChatToPeople, getUserList } from "../services/chatApi";
-import { createRoom,sendChatToRoom } from "../services/roomApi";
+import { createRoom, sendChatToRoom, joinRoom } from "../services/roomApi";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import type { Message } from "../types/Message";
@@ -69,6 +69,7 @@ const ChatApp = () => {
     subscribeMessage((msg) => {
       console.log("WS message:", msg);
 
+      // GET_USER_LIST
       if (msg.event === "GET_USER_LIST") {
         const users = msg.data.map((u: any) => ({
           name: u.name,
@@ -78,9 +79,26 @@ const ChatApp = () => {
 
         setConversations(users);
 
-        if (!selected && users.length > 0) {
-          setSelected(users[0]);
-        }
+        setSelected((prev) => {
+          // nếu chọn hội thoại nào đó thì giữ nguyên lựa chọn
+          if (prev) {
+            const existed = users.find((u: any) => u.name === prev.name);
+            if (existed) return existed;
+          }
+
+          // nếu chưa có chọn hội thoại nào thì chọn room/user đầu tiên
+          return users.length > 0 ? users[0] : null;
+        });
+      }
+
+      // JOIN_ROOM thành công
+      if (msg.event === "JOIN_ROOM" && msg.status === "success") {
+        getUserList();
+      }
+
+      // JOIN_ROOM thất bại
+      if (msg.event === "JOIN_ROOM" && msg.status === "error") {
+        alert(msg.mes);
       }
     });
   }, []);
@@ -88,17 +106,25 @@ const ChatApp = () => {
   // Tạo phòng
   const handleCreateRoom = (name: string) => {
     createRoom(name);
+
     const newRoom = {
       name,
       type: 1,
-      color: "#6ca0dc"
+      color: "#6ca0dc",
     };
-    setConversations(prev => [...prev, newRoom]);
 
-    //chọn phòng vừa tạo
+    setConversations((prev) => [...prev, newRoom]);
+
+    // chọn phòng vừa tạo
     setSelected(newRoom);
 
     console.log("Đã gửi yêu cầu tạo phòng:", name);
+  };
+
+  const handleJoinRoom = (name: string) => {
+    joinRoom(name);
+
+    console.log("Đã gửi yêu cầu tham gia phòng:", name);
   };
 
   return (
@@ -110,13 +136,14 @@ const ChatApp = () => {
 
       {/* Sidebar */}
       <Sidebar
-          conversations={conversations}
-          selected={selected}
-          setSelected={setSelected}
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-          getAvatarGradient={getAvatarGradient}
-          onCreateRoom={handleCreateRoom}
+        conversations={conversations}
+        selected={selected}
+        setSelected={setSelected}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        getAvatarGradient={getAvatarGradient}
+        onCreateRoom={handleCreateRoom}
+        onJoinRoom={handleJoinRoom}
       />
 
       {/* Khu vực chat */}
