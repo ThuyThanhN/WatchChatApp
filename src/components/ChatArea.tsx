@@ -59,26 +59,29 @@ const ChatArea = ({
       {/* Messages */}
       <div className="messages-area">
         {messages.map((m) => (
-          <div key={m.id} className={`message-row ${m.sender}`}>
-            <div className="message-content">
-              {m.sender === "other" && <p className="sender-name">{m.name}</p>}
+            <div key={m.id} className={`message-row ${m.sender}`}>
 
-              <div className={`message-bubble ${m.sender}`}>
-                <p>{m.content}</p>
-                <span className="message-time">{m.timestamp}</span>
+              <div className="message-content">
+                <p className="sender-name">
+                  {m.sender === "user" ? "Bạn" : m.name}
+                </p>
+
+                <div className={`message-bubble ${m.sender}`}>
+                  <p>{m.content}</p>
+                  <span className="message-time">{m.timestamp}</span>
+                </div>
               </div>
             </div>
-          </div>
         ))}
       </div>
 
-      {/* Input */}
-      <div className="input-area">
-        <button className="attachment-btn">
+        {/* Input */}
+          <div className="input-area">
+          <button className="attachment-btn">
           <Paperclip size={20} />
-        </button>
+    </button>
 
-        <button className="attachment-btn">
+  <button className="attachment-btn">
           <ImageIcon size={20} />
         </button>
 

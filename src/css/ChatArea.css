@@ -115,6 +115,7 @@
 
 .message-row.other {
   justify-content: flex-start;
+  gap: 8px;
 }
 
 .message-content {
@@ -127,7 +128,6 @@
   color: var(--wc-text-main);
   margin-bottom: 4px;
   padding: 0 4px;
-  margin: 0;
 }
 
 .message-bubble {

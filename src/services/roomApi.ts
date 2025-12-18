@@ -26,6 +26,19 @@ export function sendChatToRoom(to: string, mes: string) {
         },
     });
 }
+// Lấy lịch sử tin nhắn phòng
+export function getRoomChatMes(name: string, page: number = 1) {
+    sendJson({
+        action: "onchat",
+        data: {
+            event: "GET_ROOM_CHAT_MES",
+            data: {
+                name,
+                page,
+            },
+        },
+    });
+}
 
 // Tham gia phòng chat (type = "room")
 export function joinRoom(name: string) {
