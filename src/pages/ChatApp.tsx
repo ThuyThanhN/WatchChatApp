@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getSocket, subscribeMessage } from "../services/wsClient";
 import { sendChatToPeople, getUserList } from "../services/chatApi";
-import { createRoom, sendChatToRoom, joinRoom } from "../services/roomApi";
+import { createRoom, sendChatToRoom, joinRoom,getRoomChatMes } from "../services/roomApi";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import type { Message } from "../types/Message";
 import type { Conversation } from "../types/Conversation";
+
+const CURRENT_USER = localStorage.getItem("username") || "";
 
 const ChatApp = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -13,6 +15,12 @@ const ChatApp = () => {
   const [selected, setSelected] = useState<Conversation | null>(null);
   const [inputText, setInputText] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const selectedRef = useRef<Conversation | null>(null);
+
+  useEffect(() => {
+    selectedRef.current = selected;
+  }, [selected]);
 
   // Tạo màu từ tên người dùng
   const colorFromName = (name: string) => {
@@ -89,6 +97,9 @@ const ChatApp = () => {
           // nếu chưa có chọn hội thoại nào thì chọn room/user đầu tiên
           return users.length > 0 ? users[0] : null;
         });
+        if (!selectedRef.current && users.length > 0) {
+          setSelected(users[0]);
+        }
       }
 
       // JOIN_ROOM thành công
@@ -100,9 +111,64 @@ const ChatApp = () => {
       if (msg.event === "JOIN_ROOM" && msg.status === "error") {
         alert(msg.mes);
       }
+      // Lịch sủ phòng
+      if (msg.event === "GET_ROOM_CHAT_MES") {
+        const current = selectedRef.current;
+        if (!current) return;
+        if (msg.data?.name !== current.name) return;
+
+        const history = msg.data.chatData;
+        if (!Array.isArray(history)) return;
+
+        const mapped: Message[] = history.map((m: any, index: number) => {
+
+          return {
+            id: `${index}`,
+            sender: m.name === CURRENT_USER ? "user" : "other",
+            name: m.name,
+            content: m.mes,
+            timestamp: m.createAt,
+          };
+        });
+        mapped.sort((a: any, b: any) => b.id - a.id);
+
+        mapped.forEach((m: any) => delete m.id);
+        setMessages(mapped);
+      }
+
+
+      /* Tin nhan realtime */
+      if (msg.event === "SEND_CHAT") {
+        const current = selectedRef.current;
+        if (!current) return;
+        if (msg.data.to !== current.name) return;
+
+        const time = Number(msg.data.time);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `${time}-${Math.random()}`,
+            sender: msg.data.from === CURRENT_USER ? "user" : "other",
+            name: msg.data.from,
+            content: msg.data.mes,
+            timestamp: new Date(time).toLocaleTimeString(),
+          },
+        ]);
+      }
     });
   }, []);
+  //load lịch sử khi chọn phòng
+  useEffect(() => {
+    if (!selected) return;
 
+    setMessages([]); // clear UI cũ
+
+    if (selected.type === 1) {
+      // CHỈ LOAD KHI LÀ PHÒNG
+      getRoomChatMes(selected.name, 1);
+    }
+  }, [selected]);
   // Tạo phòng
   const handleCreateRoom = (name: string) => {
     createRoom(name);
