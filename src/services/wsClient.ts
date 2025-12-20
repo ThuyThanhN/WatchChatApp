@@ -6,10 +6,16 @@ let subscriber: message | null = null;
 
 function onOpen() {
   console.log("WebSocket opened");
+  tryReLogin();
 }
 
 function onClose() {
   console.log("WebSocket closed");
+
+  setTimeout(() => {
+    socket = null;
+    getSocket();
+  }, 1000);
 }
 
 function onError(event: Event) {
@@ -23,6 +29,21 @@ function onMessage(event: MessageEvent) {
   } catch (e) {
     console.error("Lỗi:", e);
   }
+}
+
+//try Relogin
+function tryReLogin() {
+  const user = localStorage.getItem("username");
+  const code = localStorage.getItem("relogin_code");
+  if (!user || !code) return;
+
+  sendJson({
+    action: "onchat",
+    data: {
+      event: "RE_LOGIN",
+      data: { user, code },
+    },
+  });
 }
 
 // Hàm tạo socket duy nhất
@@ -42,6 +63,10 @@ export function getSocket() {
 // Hàm theo dõi tin nhắn từ server
 export function subscribeMessage(handler: message) {
   subscriber = handler;
+
+  return () => {
+    if (subscriber === handler) subscriber = null;
+  };
 }
 
 // Nếu WebSocket đang mở, gửi dữ liệu dạng JSON

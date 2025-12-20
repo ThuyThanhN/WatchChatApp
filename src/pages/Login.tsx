@@ -15,12 +15,13 @@ const Login = () => {
     getSocket();
 
     // Đăng nhập
-    login(username, password);
 
-    subscribeMessage((res) => {
+    const unsubscribe = subscribeMessage((res) => {
       console.log("Server trả lời:", res);
 
-      if (res.status === "success") {
+      if (res?.event !== "RE_LOGIN") return;
+
+      if (res?.status === "success") {
         alert("Đăng nhập thành công!");
 
         // Lưu RE_LOGIN_CODE vào localStorage để dùng sau
@@ -30,11 +31,15 @@ const Login = () => {
         }
 
         // Qua chat
+        unsubscribe();
         navigate("/chat");
       } else {
         alert("Đăng nhập thất bại: " + res.mes);
+        unsubscribe();
       }
     });
+    // Đăng nhập
+    login(username, password);
   };
 
   return (
