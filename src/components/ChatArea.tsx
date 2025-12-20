@@ -13,6 +13,7 @@ type Props = {
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
   getAvatarGradient: (color: string) => string;
+  userStatus: boolean | null;
 };
 
 const ChatArea = ({
@@ -24,6 +25,7 @@ const ChatArea = ({
   handleKeyDown,
   setSidebarOpen,
   getAvatarGradient,
+  userStatus
 }: Props) => {
   return (
     <div className="main-content">
@@ -50,7 +52,18 @@ const ChatArea = ({
             </div>
 
             <div className="header-info">
+              {/* Tên user hoặc nhóm */}
               <h2>{selected.name}</h2>
+              {/* Trạng thái người dùng */}
+              {selected?.type === 0 && userStatus !== null && (
+                <div
+                  className={
+                    userStatus ? "user-status online" : "user-status offline"
+                  }
+                >
+                  {userStatus ? "Đang hoạt động" : "Ngoại tuyến"}
+                </div>
+              )}
             </div>
           </div>
         </header>

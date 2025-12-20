@@ -39,4 +39,15 @@ export function sendChatToPeople(to: string, mes: string) {
   });
 }
 
-
+// Kiểm tra trạng thái của người dùng
+export function checkUser(username: string) {
+  sendJson({
+    action: "onchat",
+    data: {
+      event: "CHECK_USER",
+      data: {
+      user: username
+      }
+    }
+  });
+}
