@@ -1,204 +1,80 @@
-/* Layout chính */
+/*  APP CONTAINER  */
 .wc-app {
     min-height: 100vh;
-    padding: 32px 24px;
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    background: radial-gradient(circle at top left, #163e67 0, #084a52 35%, #0b1720 100%);
+    padding: 16px;
+    position: relative;
+    background: radial-gradient(
+            circle at top left,
+            #163e67 0%,
+            #084a52 40%,
+            #0b1720 100%
+    );
 }
 
-/* lớp blur background */
+/* Background blur */
 .wc-gradient-bg {
     position: absolute;
-    inset: -120px;
-    background: radial-gradient(circle at 0% 0%, rgba(104, 174, 166, 0.35), transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(230, 239, 235, 0.5), transparent 55%);
-    opacity: 0.9;
+    inset: 0;
+    background: radial-gradient(
+            circle at 20% 20%,
+            rgba(104, 174, 166, 0.25),
+            transparent 60%
+    ),
+    radial-gradient(
+            circle at 80% 80%,
+            rgba(230, 239, 235, 0.35),
+            transparent 55%
+    );
     pointer-events: none;
 }
 
-/* Wrapper 2 cột */
+/*  WRAPPER  */
 .wc-auth-wrapper {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 1120px;
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: 32px;
-    backdrop-filter: blur(20px);
+    max-width: 420px; /* gọn hơn */
 }
 
-/* Hero bên trái */
-.wc-hero {
-    border-radius: var(--wc-radius-xl);
-    padding: 28px 28px 24px;
-    background: linear-gradient(135deg, rgba(8, 74, 82, 0.96), rgba(22, 62, 103, 0.96));
-    box-shadow: var(--wc-shadow-soft);
-    color: #f7fbff;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.wc-brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.wc-logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 16px;
-    background: linear-gradient(145deg, #e6efeb, #68aea6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 1.4rem;
-    color: #163e67;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-}
-
-.wc-title {
-    margin: 0;
-    font-size: 1.65rem;
-    letter-spacing: 0.04em;
-}
-
-.wc-subtitle {
-    margin: 2px 0 0;
-    font-size: 0.95rem;
-    opacity: 0.9;
-}
-
-.wc-hero-text {
-    margin: 4px 0 0;
-    font-size: 0.98rem;
-    line-height: 1.6;
-    max-width: 500px;
-    opacity: 0.95;
-}
-
-.wc-hero-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.wc-hero-tags span {
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    background: rgba(230, 239, 235, 0.12);
-    border: 1px solid rgba(230, 239, 235, 0.25);
-}
-
-/* Khung chat mini */
-.wc-chat-preview {
-    margin-top: 8px;
-    border-radius: var(--wc-radius-lg);
-    background: rgba(3, 14, 28, 0.65);
-    padding: 14px 12px;
-    border: 1px solid rgba(230, 239, 235, 0.18);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-}
-
-.wc-chat-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.wc-chat-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #68aea6, #e6efeb);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #163e67;
-}
-
-.wc-chat-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 0;
-}
-
-.wc-chat-status {
-    margin: 0;
-    font-size: 0.75rem;
-    color: #a7ffdf;
-}
-
-.wc-chat-bubbles {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.wc-bubble {
-    max-width: 90%;
-    padding: 8px 10px;
-    border-radius: 16px;
-    font-size: 0.8rem;
-    line-height: 1.4;
-}
-
-.wc-bubble-left {
-    align-self: flex-start;
-    background: rgba(15, 40, 66, 0.95);
-}
-
-.wc-bubble-right {
-    align-self: flex-end;
-    background: #68aea6;
-    color: #042325;
-}
-
-/* Card form bên phải */
+/*  CARD  */
 .wc-auth-card {
-    border-radius: var(--wc-radius-xl);
-    padding: 26px 26px 22px;
-    background: rgba(230, 239, 235, 0.9);
-    box-shadow: var(--wc-shadow-soft);
-    color: var(--wc-text-main);
+    background: rgba(230, 239, 235, 0.95);
+    border-radius: 18px;
+    padding: 22px 22px 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
     display: flex;
     flex-direction: column;
 }
 
+/*  TITLE  */
 .wc-auth-title {
-    margin: 0;
-    font-size: 1.5rem;
-    color: var(--wc-primary);
+    font-size: 1.45rem;
+    color: #163e67;
+    text-align: center;
 }
 
 .wc-auth-desc {
     margin-top: 6px;
-    margin-bottom: 18px;
-    font-size: 0.96rem;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 0.9rem;
     color: #4f5b61;
 }
 
+/*  FORM  */
 .wc-form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
 }
 
 .wc-form-row {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 .wc-form-group {
@@ -208,134 +84,82 @@
 }
 
 .wc-form-group label {
-    font-size: 0.84rem;
+    font-size: 0.78rem;
     font-weight: 600;
     color: #273238;
 }
 
-.wc-form-group input,
-.wc-form-group select {
-    border-radius: 12px;
+.wc-form-group input {
+    padding: 8px 10px;
+    border-radius: 10px;
     border: 1px solid #c9d9d2;
-    padding: 9px 11px;
-    font-size: 0.9rem;
-    outline: none;
+    font-size: 0.85rem;
     background: #f9fcfb;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease,
-    transform 0.08s ease;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .wc-form-group input::placeholder {
     color: #9aa6aa;
 }
 
-.wc-form-group input:focus,
-.wc-form-group select:focus {
-    border-color: var(--wc-primary);
+.wc-form-group input:focus {
+    border-color: #163e67;
     background: #ffffff;
-    box-shadow: 0 0 0 1px rgba(22, 62, 103, 0.12), 0 10px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 2px rgba(22, 62, 103, 0.15);
 }
 
-/* Checkbox & extra */
+/*  CHECKBOX  */
 .wc-form-extra {
     margin-top: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .wc-checkbox {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     color: #4b565b;
 }
 
 .wc-checkbox input {
-    width: 15px;
-    height: 15px;
-    accent-color: var(--wc-primary);
+    accent-color: #163e67;
 }
 
-/* Buttons */
+/*  BUTTON  */
 .wc-btn-primary {
-    margin-top: 10px;
+    margin-top: 8px;
     border: none;
     border-radius: 999px;
-    padding: 10px 14px;
-    font-size: 0.95rem;
+    padding: 9px;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    background: linear-gradient(135deg, var(--wc-primary), var(--wc-hero-dark));
-    color: #f7fbff;
-    box-shadow: 0 16px 36px rgba(22, 62, 103, 0.4);
-    transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    background: linear-gradient(135deg, #163e67, #084a52);
+    color: #ffffff;
+    box-shadow: 0 12px 28px rgba(22, 62, 103, 0.45);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .wc-btn-primary:hover {
     transform: translateY(-1px);
-    filter: brightness(1.03);
-    box-shadow: 0 20px 40px rgba(22, 62, 103, 0.5);
+    box-shadow: 0 16px 36px rgba(22, 62, 103, 0.55);
 }
 
 .wc-btn-primary:active {
     transform: translateY(0);
-    box-shadow: 0 10px 26px rgba(22, 62, 103, 0.35);
 }
 
-.wc-btn-ghost {
-    margin-top: 4px;
-    width: 100%;
-    border-radius: 999px;
-    padding: 9px 14px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid #c4d4cf;
-    background: rgba(230, 239, 235, 0.8);
-    color: #345;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: background 0.1s ease, transform 0.08s ease, box-shadow 0.08s ease;
-}
-
-.wc-btn-ghost:hover {
-    background: #ffffff;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
-    transform: translateY(-1px);
-}
-
-.wc-divider {
-    margin: 12px 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.82rem;
-    color: #7b878c;
-}
-
-.wc-divider::before,
-.wc-divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #c4d4cf);
-}
-
-/* Footer */
+/*  FOOTER  */
 .wc-auth-footer {
-    margin-top: 6px;
-    font-size: 0.84rem;
-    color: #4b565b;
+    margin-top: 8px;
+    font-size: 0.8rem;
     text-align: center;
+    color: #4b565b;
 }
 
 .wc-auth-footer a {
-    color: var(--wc-primary);
+    color: #163e67;
     font-weight: 600;
     text-decoration: none;
 }
@@ -344,35 +168,21 @@
     text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-    .wc-app {
-        padding: 18px 14px;
-    }
-
+/*  RESPONSIVE  */
+@media (max-width: 520px) {
     .wc-auth-wrapper {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .wc-hero {
-        order: 2;
+        max-width: 100%;
     }
 
     .wc-auth-card {
-        order: 1;
+        padding: 18px 16px;
     }
-}
 
-@media (max-width: 600px) {
     .wc-form-row {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: 1fr;
     }
 
-    .wc-hero {
-        padding: 20px 18px;
-    }
-
-    .wc-auth-card {
-        padding: 20px 18px;
+    .wc-auth-title {
+        font-size: 1.3rem;
     }
 }
