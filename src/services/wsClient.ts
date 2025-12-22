@@ -12,6 +12,12 @@ function onOpen() {
 function onClose() {
   console.log("WebSocket closed");
 
+  const user = localStorage.getItem("username");
+  const code = localStorage.getItem("relogin_code");
+
+  // Chưa đăng nhập thì không reconnect
+  if (!user || !code) return;
+
   setTimeout(() => {
     socket = null;
     getSocket();
@@ -33,6 +39,9 @@ function onMessage(event: MessageEvent) {
 
 //try Relogin
 function tryReLogin() {
+  const path = window.location.pathname;
+  if (path === "/login" || path === "/signup") return;
+
   const user = localStorage.getItem("username");
   const code = localStorage.getItem("relogin_code");
   if (!user || !code) return;
@@ -69,14 +78,28 @@ export function subscribeMessage(handler: message) {
   };
 }
 
-// Nếu WebSocket đang mở, gửi dữ liệu dạng JSON
-// ngược lại thì in cảnh báo
+// Gửi dữ liệu JSON qua WebSocket, tự chờ khi socket chưa mở
+
 export function sendJson(obj: any) {
   const ws = getSocket();
+  const payload = JSON.stringify(obj);
+
+  console.log("WS send:", obj);
+
   if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify(obj));
-  } else {
-    console.warn("Socket chưa OPEN, trạng thái:", ws.readyState);
+    ws.send(payload);
+    return;
   }
+  if(ws.readyState === WebSocket.CONNECTING) {
+    ws.addEventListener(
+        "open",
+        () => {
+          ws.send(payload);
+        },
+        { once: true }
+    );
+    return;
+  }
+    console.warn("Socket chưa OPEN, trạng thái:", ws.readyState);
 }
 
