@@ -42,54 +42,12 @@ const Login = () => {
   };
 
   return (
-    <div className="wc-app">
-      <div className="wc-gradient-bg"></div>
-
-      <div className="wc-auth-wrapper">
-
-        {/* Cột form đăng nhập */}
-        <section className="wc-auth-card">
-          <h2 className="wc-auth-title">Đăng nhập</h2>
-          <p className="wc-auth-desc">Đăng nhập để tiếp tục chat.</p>
-
-          <form className="wc-form" onSubmit={handleLogin}>
-            <div className="wc-form-group">
-              <label htmlFor="username">Tên đăng nhập</label>
-              <input
-                id="username"
-                type="text"
-                placeholder="Tên đăng nhập"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-
-            <div className="wc-hero-tags">
-              <span>#Appchat</span>
-              <span>#ChatWithFriend</span>
-              <span>#RealTime</span>
-            </div>
-
-            {/* Mô phỏng khung chat mini */}
-            <div className="wc-chat-preview">
-              <div className="wc-chat-header">
-                <div className="wc-chat-avatar">S</div>
-                <div>
-                  <p className="wc-chat-name">User1</p>
-                  <p className="wc-chat-status">Đang hoạt động</p>
-                </div>
-              </div>
-
-              <div className="wc-chat-bubbles">
-                <div className="wc-bubble wc-bubble-left">Hello</div>
-                <div className="wc-bubble wc-bubble-right">Hiiii</div>
-              </div>
-            </div>
-          </section>
-
-          {/* Cột form đăng nhập */}
+      <div className="wc-app">
+        <div className="wc-gradient-bg"></div>
+        <div className="wc-auth-wrapper">
           <section className="wc-auth-card">
             <h2 className="wc-auth-title">Đăng nhập</h2>
-            <p className="wc-auth-desc">Đăng nhập để tiếp tục chat.</p>
+            <p className="wc-auth-desc">Đăng nhập để tiếp tục chat</p>
 
             <form className="wc-form" onSubmit={handleLogin}>
               <div className="wc-form-group">
@@ -98,7 +56,9 @@ const Login = () => {
                     id="username"
                     type="text"
                     placeholder="Tên đăng nhập"
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    required
                 />
               </div>
 
@@ -108,34 +68,26 @@ const Login = () => {
                     id="password"
                     type="password"
                     placeholder="Nhập mật khẩu"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
-              </div>
-
-              <div className="wc-form-extra">
-                <label className="wc-checkbox">
-                  <input type="checkbox" />
-                  <span>Nhớ mật khẩu</span>
-                </label>
               </div>
 
               <button type="submit" className="wc-btn-primary">
                 Đăng nhập
               </button>
 
-              <div className="wc-divider">
-                <span>hoặc</span>
-              </div>
-
               <p className="wc-auth-footer">
                 Chưa có tài khoản? <Link to="/signup">Đăng ký ngay</Link>
               </p>
             </form>
           </section>
-        </div>
 
+        </div>
       </div>
   );
 };
+
 
 export default Login;
