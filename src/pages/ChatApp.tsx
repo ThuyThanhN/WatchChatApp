@@ -93,6 +93,22 @@ const ChatApp = () => {
     subscribeMessage((msg) => {
       console.log("WS message:", msg);
 
+      // RE_LOGIN
+      if (msg?.event === "RE_LOGIN") {
+        if (msg?.status === "success") {
+          console.log("RE_LOGIN thành công");
+
+          // ReLogin thành công, load lại dsach
+          getUserList();
+          return;
+        }
+
+        console.log("RE_LOGIN thất bại:", msg?.mes);
+        localStorage.removeItem("relogin_code");
+        localStorage.removeItem("username");
+        window.location.href = "/login";
+        return;
+      }
       // GET_USER_LIST
       if (msg.event === "GET_USER_LIST") {
         const users = msg.data.map((u: any) => ({
@@ -117,6 +133,17 @@ const ChatApp = () => {
           setSelected(users[0]);
         }
       }
+
+      // CREATE_ROOM
+      if (msg.event === "CREATE_ROOM") {
+        if (msg.status === "success") {
+          alert("Tạo phòng thành công!");
+          getUserList(); // reload danh sách phòng
+        } else {
+          alert(msg.mes || "Phòng đã tồn tại");
+        }
+      }
+
 
       // JOIN_ROOM thành công
       if (msg.event === "JOIN_ROOM" && msg.status === "success") {
@@ -166,7 +193,7 @@ const ChatApp = () => {
             sender: msg.data.from === CURRENT_USER ? "user" : "other",
             name: msg.data.from,
             content: msg.data.mes,
-            timestamp: new Date(time).toLocaleTimeString(),
+            timestamp: msg.createAt,
           },
         ]);
       }
@@ -188,21 +215,10 @@ const ChatApp = () => {
       getRoomChatMes(selected.name, 1);
     }
   }, [selected]);
+
   // Tạo phòng
   const handleCreateRoom = (name: string) => {
     createRoom(name);
-
-    const newRoom = {
-      name,
-      type: 1,
-      color: "#6ca0dc",
-    };
-
-    setConversations((prev) => [...prev, newRoom]);
-
-    // chọn phòng vừa tạo
-    setSelected(newRoom);
-
     console.log("Đã gửi yêu cầu tạo phòng:", name);
   };
 
