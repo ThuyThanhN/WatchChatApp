@@ -418,19 +418,3 @@
     height: 32px;
   }
 }
-
-
-.user-status {
-  font-size: 13px;
-  color: var(--wc-primary);
-}
-
-.user-status.online {
-  color: var(--wc-online);
-  font-weight: 600;
-}
-
-.user-status.offline {
-  color: var(--wc-offline);
-  font-weight: 600;
-}

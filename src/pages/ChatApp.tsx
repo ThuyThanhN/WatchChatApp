@@ -1,12 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { getSocket, subscribeMessage } from "../services/wsClient";
-import { sendChatToPeople, getUserList, checkUser } from "../services/chatApi";
-import {
-  createRoom,
-  sendChatToRoom,
-  joinRoom,
-  getRoomChatMes,
-} from "../services/roomApi";
+import { sendChatToPeople, getUserList } from "../services/chatApi";
+import { createRoom, sendChatToRoom, joinRoom,getRoomChatMes } from "../services/roomApi";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import type { Message } from "../types/Message";
@@ -20,7 +15,7 @@ const ChatApp = () => {
   const [selected, setSelected] = useState<Conversation | null>(null);
   const [inputText, setInputText] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userStatus, setUserStatus] = useState<boolean | null>(null);
+
   const selectedRef = useRef<Conversation | null>(null);
 
   useEffect(() => {
@@ -72,17 +67,6 @@ const ChatApp = () => {
 
     setInputText("");
   };
-
-  useEffect(() => {
-    if (!selected) return;
-
-    // Online/offline cho chat cá nhân
-    if (selected.type === 0) {
-      checkUser(selected.name);
-    } else {
-      setUserStatus(null); // room thì không có status
-    }
-  }, [selected]);
 
   useEffect(() => {
     getSocket();
@@ -164,6 +148,7 @@ const ChatApp = () => {
         if (!Array.isArray(history)) return;
 
         const mapped: Message[] = history.map((m: any, index: number) => {
+
           return {
             id: `${index}`,
             sender: m.name === CURRENT_USER ? "user" : "other",
@@ -177,6 +162,7 @@ const ChatApp = () => {
         mapped.forEach((m: any) => delete m.id);
         setMessages(mapped);
       }
+
 
       /* Tin nhan realtime */
       if (msg.event === "SEND_CHAT") {
@@ -196,11 +182,6 @@ const ChatApp = () => {
             timestamp: msg.createAt,
           },
         ]);
-      }
-
-      if (msg.event === "CHECK_USER") {
-        const isOnline = msg.data.status;
-        setUserStatus(isOnline);
       }
     });
   }, []);
@@ -258,7 +239,6 @@ const ChatApp = () => {
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         getAvatarGradient={getAvatarGradient}
-        userStatus={userStatus}
       />
     </div>
   );
