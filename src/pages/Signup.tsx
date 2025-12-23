@@ -44,49 +44,6 @@ const Signup = () => {
             <div className="wc-gradient-bg"></div>
 
             <div className="wc-auth-wrapper">
-                {/* Cột giới thiệu */}
-                <section className="wc-hero">
-                    <div className="wc-brand">
-                        <div className="wc-logo">W</div>
-                        <div>
-                            <h1 className="wc-title">ChatApp</h1>
-                            <p className="wc-subtitle">Chat &amp; Chill with your friends</p>
-                        </div>
-                    </div>
-
-                    <p className="wc-hero-text">
-                        Kết nối nhanh với bạn bè, trao đổi ngay trong
-                        khung chat. Tất cả hội thoại đều được lưu lại
-                        gọn gàng.
-                    </p>
-
-                    <div className="wc-hero-tags">
-                        <span>#Appchat</span>
-                        <span>#ChatWithFriend</span>
-                        <span>#RealTime</span>
-                    </div>
-
-                    {/* Mô phỏng khung chat mini */}
-                    <div className="wc-chat-preview">
-                        <div className="wc-chat-header">
-                            <div className="wc-chat-avatar">S</div>
-                            <div>
-                                <p className="wc-chat-name">User1</p>
-                                <p className="wc-chat-status">Đang hoạt động</p>
-                            </div>
-                        </div>
-
-                        <div className="wc-chat-bubbles">
-                            <div className="wc-bubble wc-bubble-left">
-                                Hello
-                            </div>
-                            <div className="wc-bubble wc-bubble-right">
-                                Hiiii
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 {/* Cột form đăng ký */}
                 <section className="wc-auth-card">
                     <h2 className="wc-auth-title">Đăng ký tài khoản</h2>
@@ -153,14 +110,6 @@ const Signup = () => {
 
                         <button type="submit" className="wc-btn-primary">
                             Đăng ký ngay
-                        </button>
-
-                        <div className="wc-divider">
-                            <span>hoặc</span>
-                        </div>
-
-                        <button type="button" className="wc-btn-ghost">
-                            Đăng ký nhanh với Google
                         </button>
 
                         <p className="wc-auth-footer">

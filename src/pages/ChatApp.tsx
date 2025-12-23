@@ -152,7 +152,7 @@ const ChatApp = () => {
             sender: msg.data.from === CURRENT_USER ? "user" : "other",
             name: msg.data.from,
             content: msg.data.mes,
-            timestamp: new Date(time).toLocaleTimeString(),
+            timestamp: msg.createAt,
           },
         ]);
       }

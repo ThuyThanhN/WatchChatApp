@@ -54,4 +54,13 @@ export function sendJson(obj: any) {
     console.warn("Socket chưa OPEN, trạng thái:", ws.readyState);
   }
 }
+// Đóng socket
+export function closeSocket() {
+  if (socket) {
+    socket.close();
+    socket = null;
+  }
+  subscriber = null;
+}
+
 
