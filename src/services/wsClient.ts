@@ -3,29 +3,42 @@ let socket: WebSocket | null = null;
 
 type message = (data: any) => void;
 let subscriber: message | null = null;
+// Load khi socket chưa mở
+let loadingListener: ((loading: boolean) => void) | null = null;
+
+export function subscribeSocketLoading(cb: (loading: boolean) => void) {
+  loadingListener = cb;
+}
+
+function setLoading(v: boolean) {
+  if (loadingListener) loadingListener(v);
+}
 
 function onOpen() {
   console.log("WebSocket opened");
+  // Ko load nưa
+  setLoading(false);
   tryReLogin();
 }
 
 function onClose() {
   console.log("WebSocket closed");
 
-  const user = localStorage.getItem("username");
-  const code = localStorage.getItem("relogin_code");
-
-  // Chưa đăng nhập thì không reconnect
-  if (!user || !code) return;
+  // const user = localStorage.getItem("username");
+  // const code = localStorage.getItem("relogin_code");
+  //
+  // // Chưa đăng nhập thì không reconnect
+  // if (!user || !code) return;
 
   setTimeout(() => {
     socket = null;
     getSocket();
-  }, 1000);
+  }, 300);
 }
 
 function onError(event: Event) {
   console.error("WebSocket error:", event);
+  setLoading(false);
 }
 
 function onMessage(event: MessageEvent) {
@@ -58,6 +71,8 @@ function tryReLogin() {
 // Hàm tạo socket duy nhất
 export function getSocket() {
   if (socket) return socket;
+
+  setLoading(true);
 
   socket = new WebSocket("wss://chat.longapp.site/chat/chat");
 

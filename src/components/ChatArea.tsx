@@ -11,7 +11,6 @@ import type { Message } from "../types/Message";
 import type { Conversation } from "../types/Conversation";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../services/userApi";
-import { closeSocket } from "../services/wsClient";
 import { useState } from "react";
 
 type Props = {
@@ -49,10 +48,7 @@ const ChatArea = ({
     localStorage.removeItem("username");
     localStorage.removeItem("relogin_code");
 
-    // 3. Đóng socket
-    closeSocket();
-
-    // 4. Quay về trang login
+    // 3. Quay về trang login
     navigate("/login");
   };
   return (
