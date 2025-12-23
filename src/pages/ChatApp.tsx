@@ -199,7 +199,7 @@ const ChatApp = () => {
         ]);
       }
 
-      if (msg.event === "CHECK_USER") {
+      if (msg.event === "CHECK_USER_ONLINE") {
         const isOnline = msg.data.status;
         setUserStatus(isOnline);
       }
