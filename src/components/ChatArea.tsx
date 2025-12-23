@@ -17,6 +17,7 @@ type Props = {
   sidebarOpen: boolean;
   setSidebarOpen: (v: boolean) => void;
   getAvatarGradient: (color: string) => string;
+  userStatus: boolean | null;
 };
 
 const ChatArea = ({
@@ -28,6 +29,7 @@ const ChatArea = ({
   handleKeyDown,
   setSidebarOpen,
   getAvatarGradient,
+  userStatus
 }: Props) => {
     const navigate = useNavigate();
     const [openMenu, setOpenMenu] = useState(false);
@@ -82,6 +84,23 @@ const ChatArea = ({
                       <MoreVertical size={20}/>
                   </button>
 
+
+            <div className="header-info">
+              {/* Tên user hoặc nhóm */}
+              <h2>{selected.name}</h2>
+              {/* Trạng thái người dùng */}
+              {selected?.type === 0 && userStatus !== null && (
+                <div
+                  className={
+                    userStatus ? "user-status online" : "user-status offline"
+                  }
+                >
+                  {userStatus ? "Đang hoạt động" : "Ngoại tuyến"}
+                </div>
+              )}
+            </div>
+          </div>
+ 
                   {openMenu && (
                       <div className="header-dropdown">
                           <button onClick={handleLogout}>
@@ -92,6 +111,7 @@ const ChatArea = ({
                   )}
               </div>
           </header>
+
       )}
 
         {/* Messages */}
