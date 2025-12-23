@@ -15,7 +15,7 @@ export function checkUser(username: string) {
   sendJson({
     action: "onchat",
     data: {
-      event: "CHECK_USER",
+      event: "CHECK_USER_ONLINE",
       data: {
       user: username
       }
