@@ -102,6 +102,17 @@ const ChatApp = () => {
         }
       }
 
+      // CREATE_ROOM
+      if (msg.event === "CREATE_ROOM") {
+        if (msg.status === "success") {
+          alert("Tạo phòng thành công!");
+          getUserList(); // reload danh sách phòng
+        } else {
+          alert(msg.mes || "Phòng đã tồn tại");
+        }
+      }
+
+
       // JOIN_ROOM thành công
       if (msg.event === "JOIN_ROOM" && msg.status === "success") {
         getUserList();
@@ -169,21 +180,10 @@ const ChatApp = () => {
       getRoomChatMes(selected.name, 1);
     }
   }, [selected]);
+
   // Tạo phòng
   const handleCreateRoom = (name: string) => {
     createRoom(name);
-
-    const newRoom = {
-      name,
-      type: 1,
-      color: "#6ca0dc",
-    };
-
-    setConversations((prev) => [...prev, newRoom]);
-
-    // chọn phòng vừa tạo
-    setSelected(newRoom);
-
     console.log("Đã gửi yêu cầu tạo phòng:", name);
   };
 
