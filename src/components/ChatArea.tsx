@@ -1,6 +1,5 @@
 import "../css/ChatArea.css";
 import {
-  Paperclip,
   ImageIcon,
   Send,
   Menu,
@@ -12,6 +11,9 @@ import type { Conversation } from "../types/Conversation";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../services/userApi";
 import { useState } from "react";
+import { uploadImage } from "../services/chatApi";
+
+
 
 type Props = {
   selected: Conversation | null;
@@ -24,6 +26,8 @@ type Props = {
   setSidebarOpen: (v: boolean) => void;
   getAvatarGradient: (color: string) => string;
   userStatus: boolean | null;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  onSendImage: (imageUrl: string) => void;
 };
 
 const ChatArea = ({
@@ -36,9 +40,20 @@ const ChatArea = ({
   setSidebarOpen,
   getAvatarGradient,
   userStatus,
+  onSendImage,
 }: Props) => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
+
+  const handleSelectImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = await uploadImage(file);
+
+    onSendImage(imageUrl);
+  };
+
 
   const handleLogout = () => {
     // 1. Gửi logout lên server
@@ -122,7 +137,16 @@ const ChatArea = ({
               </p>
 
               <div className={`message-bubble ${m.sender}`}>
-                <p>{m.content}</p>
+                {/* Nếu là ảnh thì render <img> */}
+                {m.type === "image" ? (
+                    <img
+                        src={m.content}
+                        className="chat-image"
+                        alt="sent-img"
+                    />
+                ) : (
+                    <p>{m.content}</p>
+                )}
                 <span className="message-time">{m.timestamp}</span>
               </div>
             </div>
@@ -132,24 +156,32 @@ const ChatArea = ({
 
       {/* Input */}
       <div className="input-area">
-        <button className="attachment-btn">
-          <Paperclip size={20} />
-        </button>
 
-        <button className="attachment-btn">
-          <ImageIcon size={20} />
-        </button>
+        <input
+            type="file"
+            accept="image/*"
+            hidden
+            id="imageInput"
+            onChange={handleSelectImage}
+        />
+        
 
         <textarea
-          placeholder="Nhập tin nhắn..."
-          className="message-input"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          onKeyDown={handleKeyDown}
+            placeholder="Nhập tin nhắn..."
+            className="message-input"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={handleKeyDown}
         />
+        <button
+            className="attachment-btn"
+            onClick={() => document.getElementById("imageInput")?.click()}
+        >
+          <ImageIcon size={20}/>
+        </button>
 
         <button className="send-button" onClick={handleSend}>
-          <Send size={20} />
+          <Send size={20}/>
         </button>
       </div>
     </div>

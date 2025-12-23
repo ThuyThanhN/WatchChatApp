@@ -434,3 +434,8 @@
   color: var(--wc-offline);
   font-weight: 600;
 }
+.chat-image {
+  max-width: 220px;
+  border-radius: 8px;
+  margin-top: 4px;
+}

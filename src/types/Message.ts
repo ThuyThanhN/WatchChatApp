@@ -4,4 +4,5 @@ export type Message = {
   content: string;
   timestamp: string;
   name?: string;
+  type?: "text" | "image";
 };

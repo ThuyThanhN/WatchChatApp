@@ -75,6 +75,29 @@ const ChatApp = () => {
     setInputText("");
   };
 
+  //gửi ảnh
+  const sendImageMessage = (imageUrl: string) => {
+    if (!selected) return;
+
+    if (selected.type === 1) {
+      sendChatToRoom(selected.name, imageUrl);
+    } else {
+      sendChatToPeople(selected.name, imageUrl);
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        sender: "user",
+        content: imageUrl,
+        timestamp: new Date().toLocaleTimeString(),
+        type: "image",
+      },
+    ]);
+  };
+
+
   useEffect(() => {
     if (!selected) return;
 
@@ -171,6 +194,7 @@ const ChatApp = () => {
             name: m.name,
             content: m.mes,
             timestamp: m.createAt,
+            type: m.mes.startsWith("http") ? "image" : "text",
           };
         });
         mapped.sort((a: any, b: any) => b.id - a.id);
@@ -195,6 +219,7 @@ const ChatApp = () => {
             name: msg.data.from,
             content: msg.data.mes,
             timestamp: msg.createAt,
+            type: msg.data.mes.startsWith("http") ? "image" : "text",
           },
         ]);
       }
@@ -252,6 +277,7 @@ const ChatApp = () => {
       <ChatArea
         selected={selected}
         messages={messages}
+        setMessages={setMessages}
         inputText={inputText}
         setInputText={setInputText}
         handleSend={handleSend}
@@ -260,6 +286,7 @@ const ChatApp = () => {
         setSidebarOpen={setSidebarOpen}
         getAvatarGradient={getAvatarGradient}
         userStatus={userStatus}
+        onSendImage={sendImageMessage}
       />
     </div>
   );
