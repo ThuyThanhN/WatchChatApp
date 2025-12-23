@@ -6,10 +6,22 @@ let subscriber: message | null = null;
 
 function onOpen() {
   console.log("WebSocket opened");
+  tryReLogin();
 }
 
 function onClose() {
   console.log("WebSocket closed");
+
+  const user = localStorage.getItem("username");
+  const code = localStorage.getItem("relogin_code");
+
+  // Chưa đăng nhập thì không reconnect
+  if (!user || !code) return;
+
+  setTimeout(() => {
+    socket = null;
+    getSocket();
+  }, 1000);
 }
 
 function onError(event: Event) {
@@ -23,6 +35,24 @@ function onMessage(event: MessageEvent) {
   } catch (e) {
     console.error("Lỗi:", e);
   }
+}
+
+//try Relogin
+function tryReLogin() {
+  const path = window.location.pathname;
+  if (path === "/login" || path === "/signup") return;
+
+  const user = localStorage.getItem("username");
+  const code = localStorage.getItem("relogin_code");
+  if (!user || !code) return;
+
+  sendJson({
+    action: "onchat",
+    data: {
+      event: "RE_LOGIN",
+      data: { user, code },
+    },
+  });
 }
 
 // Hàm tạo socket duy nhất
@@ -42,17 +72,35 @@ export function getSocket() {
 // Hàm theo dõi tin nhắn từ server
 export function subscribeMessage(handler: message) {
   subscriber = handler;
+
+  return () => {
+    if (subscriber === handler) subscriber = null;
+  };
 }
 
-// Nếu WebSocket đang mở, gửi dữ liệu dạng JSON
-// ngược lại thì in cảnh báo
+// Gửi dữ liệu JSON qua WebSocket, tự chờ khi socket chưa mở
+
 export function sendJson(obj: any) {
   const ws = getSocket();
+  const payload = JSON.stringify(obj);
+
+  console.log("WS send:", obj);
+
   if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify(obj));
-  } else {
-    console.warn("Socket chưa OPEN, trạng thái:", ws.readyState);
+    ws.send(payload);
+    return;
   }
+  if(ws.readyState === WebSocket.CONNECTING) {
+    ws.addEventListener(
+        "open",
+        () => {
+          ws.send(payload);
+        },
+        { once: true }
+    );
+    return;
+  }
+    console.warn("Socket chưa OPEN, trạng thái:", ws.readyState);
 }
 // Đóng socket
 export function closeSocket() {

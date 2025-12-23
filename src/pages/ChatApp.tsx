@@ -77,6 +77,22 @@ const ChatApp = () => {
     subscribeMessage((msg) => {
       console.log("WS message:", msg);
 
+      // RE_LOGIN
+      if (msg?.event === "RE_LOGIN") {
+        if (msg?.status === "success") {
+          console.log("RE_LOGIN thành công");
+
+          // ReLogin thành công, load lại dsach
+          getUserList();
+          return;
+        }
+
+        console.log("RE_LOGIN thất bại:", msg?.mes);
+        localStorage.removeItem("relogin_code");
+        localStorage.removeItem("username");
+        window.location.href = "/login";
+        return;
+      }
       // GET_USER_LIST
       if (msg.event === "GET_USER_LIST") {
         const users = msg.data.map((u: any) => ({
