@@ -2,7 +2,7 @@ import "../css/Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getSocket, subscribeMessage } from "../services/wsClient";
-import { UserApi} from "../services/chatApi";
+import {login} from "../services/userApi";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -38,7 +38,7 @@ const Login = () => {
       }
     });
     // Đăng nhập
-    UserApi.login(username, password);
+    login(username, password);
   };
 
   return (

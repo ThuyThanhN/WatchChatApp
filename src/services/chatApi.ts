@@ -1,51 +1,5 @@
 import { sendJson } from "./wsClient";
 
-export class UserApi {
-  static register(username: string, password: string) {
-    sendJson({
-      action: "onchat",
-      data: {
-        event: "REGISTER",
-        data: {
-          user: username,
-          pass: password,
-        },
-      },
-    });
-  }
-
-  static login(username: string, password: string) {
-    sendJson({
-      action: "onchat",
-      data: {
-        event: "LOGIN",
-        data: {
-          user: username,
-          pass: password,
-        },
-      },
-    });
-  }
-
-  // (tuỳ bạn dùng) gọi tay RE_LOGIN khi cần
-  static reLogin(username: string, code: string) {
-    sendJson({
-      action: "onchat",
-      data: {
-        event: "RE_LOGIN",
-        data: { user: username, code },
-      },
-    });
-  }
-
-  static logout() {
-    sendJson({
-      action: "onchat",
-      data: { event: "LOGOUT" },
-    });
-  }
-}
-
 // Lấy danh sách người dùng chat
 export function getUserList() {
   sendJson({
@@ -70,5 +24,26 @@ export function sendChatToPeople(to: string, mes: string) {
     },
   });
 }
+
+// gửi ảnh
+export async function uploadImage(file: File): Promise<string> {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("upload_preset", "upload_image");
+  form.append("cloud_name", "dhfjendel");
+
+  const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dhfjendel/image/upload",
+      {
+        method: "POST",
+        body: form,
+      }
+  );
+
+  const data = await res.json();
+
+  return data.secure_url;
+}
+
 
 
