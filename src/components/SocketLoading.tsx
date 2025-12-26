@@ -1,6 +1,5 @@
 import "../css/SocketLoading.css";
 
-
 const SocketLoading = () => {
     return (
         <div className="socket-loading-backdrop">

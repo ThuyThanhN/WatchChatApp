@@ -1,7 +1,7 @@
-import {sendJson} from "./wsClient.ts";
+import { sendJson } from "./wsClient.ts";
 
-//Tạo phòng
-export function createRoom(name: string){
+// Tạo phòng
+export function createRoom(name: string) {
     sendJson({
         "action": "onchat",
         "data": {
@@ -42,13 +42,13 @@ export function getRoomChatMes(name: string, page: number = 1) {
 
 // Tham gia phòng chat (type = "room")
 export function joinRoom(name: string) {
-  sendJson({
-    action: "onchat",
-    data: {
-      event: "JOIN_ROOM",
-      data: {
-        name
-      }
-    }
-  });
+    sendJson({
+        action: "onchat",
+        data: {
+            event: "JOIN_ROOM",
+            data: {
+                name
+            }
+        }
+    });
 }

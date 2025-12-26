@@ -1,4 +1,6 @@
 import { sendJson } from "./wsClient";
+
+// Đăng ký
 export function register(username: string, password: string) {
     sendJson({
         action: "onchat",
@@ -12,6 +14,7 @@ export function register(username: string, password: string) {
     });
 }
 
+// Đăng nhập
 export function login(username: string, password: string) {
     sendJson({
         action: "onchat",
@@ -25,7 +28,7 @@ export function login(username: string, password: string) {
     });
 }
 
-// (tuỳ bạn dùng) gọi tay RE_LOGIN khi cần
+// RE_LOGIN khi mất kết nối
 export function reLogin(username: string, code: string) {
     sendJson({
         action: "onchat",
@@ -35,7 +38,7 @@ export function reLogin(username: string, code: string) {
         },
     });
 }
-//logout
+// Đăng xuất
 export function logout() {
     sendJson({
         action: "onchat",
@@ -47,13 +50,26 @@ export function logout() {
 
 // Kiểm tra trạng thái của người dùng
 export function checkUser(username: string) {
-  sendJson({
-    action: "onchat",
-    data: {
-      event: "CHECK_USER_ONLINE",
-      data: {
-      user: username
-      }
-    }
-  });
+    sendJson({
+        action: "onchat",
+        data: {
+            event: "CHECK_USER_ONLINE",
+            data: {
+                user: username
+            }
+        }
+    });
+}
+
+// Kiểm tra user có tồn tại không?
+export function checkUserExist(username: string) {
+    sendJson({
+        action: "onchat",
+        data: {
+            event: "CHECK_USER_EXIST",
+            data: {
+                user: username
+            }
+        }
+    });
 }

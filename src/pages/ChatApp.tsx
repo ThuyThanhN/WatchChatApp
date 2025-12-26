@@ -7,7 +7,7 @@ import {
   joinRoom,
   getRoomChatMes,
 } from "../services/roomApi";
-import { checkUser } from "../services/userApi";
+import { checkUser, checkUserExist } from "../services/userApi";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
 import type { Message } from "../types/Message";
@@ -24,11 +24,10 @@ const ChatApp = () => {
   const [userStatus, setUserStatus] = useState<boolean | null>(null);
 
   const selectedRef = useRef<Conversation | null>(null);
+  const searchKeywordRef = useRef<string>("");
 
-  useEffect(() => {
-    selectedRef.current = selected;
-  }, [selected]);
-
+  // ------- Hàm -----------
+  
   // Tạo màu từ tên người dùng
   const colorFromName = (name: string) => {
     let hash = 0;
@@ -73,9 +72,76 @@ const ChatApp = () => {
     ]);
 
     setInputText("");
+    setConversations((prev) => {
+      if (prev.some((c) => c.name === selected.name)) return prev;
+      return [selected, ...prev];
+    });
   };
 
-  //gửi ảnh
+  // Gộp conversation
+  const mergeConversations = (
+    feList: Conversation[],
+    beList: Conversation[]
+  ) => {
+    const map = new Map<string, Conversation>();
+
+    feList.forEach((c) => {
+      map.set(`${c.type}-${c.name}`, c);
+    });
+
+    beList.forEach((c) => {
+      const key = `${c.type}-${c.name}`;
+      if (!map.has(key)) {
+        map.set(key, c);
+      }
+    });
+
+    return Array.from(map.values());
+  };
+
+  // Xử lý tìm kiếm theo tên user
+  const handleSearchUser = (username: string) => {
+    const value = username.trim();
+    if (!value) return;
+
+    searchKeywordRef.current = value;
+    checkUserExist(value);
+  };
+
+  // Tạo hoặc mở hội thoại chat cá nhân ở frontend sau khi tìm kiếm user
+  const handleStartChat = (username: string) => {
+    setConversations((prev) => {
+      const existed = prev.find((c) => c.name === username && c.type === 0);
+
+      if (existed) {
+        setSelected(existed);
+        return prev;
+      }
+
+      const newConv: Conversation = {
+        name: username,
+        type: 0,
+        color: colorFromName(username),
+      };
+
+      setSelected(newConv);
+      return [newConv, ...prev];
+    });
+  };
+
+  // Tạo phòng
+  const handleCreateRoom = (name: string) => {
+    createRoom(name);
+    console.log("Đã gửi yêu cầu tạo phòng:", name);
+  };
+
+  // Tham gia phòng
+  const handleJoinRoom = (name: string) => {
+    joinRoom(name);
+    console.log("Đã gửi yêu cầu tham gia phòng:", name);
+  };
+
+  // Gửi ảnh
   const sendImageMessage = (imageUrl: string) => {
     if (!selected) return;
 
@@ -97,6 +163,11 @@ const ChatApp = () => {
     ]);
   };
 
+  // ------- useEffect -----------
+
+  useEffect(() => {
+    selectedRef.current = selected;
+  }, [selected]);
 
   useEffect(() => {
     if (!selected) return;
@@ -142,7 +213,7 @@ const ChatApp = () => {
           color: colorFromName(u.name),
         }));
 
-        setConversations(users);
+        setConversations((prev) => mergeConversations(prev, users));
 
         setSelected((prev) => {
           // nếu chọn hội thoại nào đó thì giữ nguyên lựa chọn
@@ -178,7 +249,8 @@ const ChatApp = () => {
       if (msg.event === "JOIN_ROOM" && msg.status === "error") {
         alert(msg.mes);
       }
-      // Lịch sủ phòng
+
+      // GET_ROOM_CHAT_MES
       if (msg.event === "GET_ROOM_CHAT_MES") {
         const current = selectedRef.current;
         if (!current) return;
@@ -203,7 +275,7 @@ const ChatApp = () => {
         setMessages(mapped);
       }
 
-      /* Tin nhan realtime */
+      /* SEND_CHAT */
       if (msg.event === "SEND_CHAT") {
         const current = selectedRef.current;
         if (!current) return;
@@ -224,35 +296,36 @@ const ChatApp = () => {
         ]);
       }
 
+      // CHECK_USER_ONLINE
       if (msg.event === "CHECK_USER_ONLINE") {
         const isOnline = msg.data.status;
         setUserStatus(isOnline);
       }
+
+      // CHECK_USER_EXIST
+      if (msg.event === "CHECK_USER_EXIST") {
+        const isExist = msg.data.status;
+
+        if (isExist) {
+          handleStartChat(searchKeywordRef.current);
+        } else {
+          alert("Người dùng không tồn tại");
+        }
+      }
     });
   }, []);
-  //load lịch sử khi chọn phòng
+
+  // Load lịch sử chọn phòng
   useEffect(() => {
     if (!selected) return;
 
     setMessages([]); // clear UI cũ
 
     if (selected.type === 1) {
-      // CHỈ LOAD KHI LÀ PHÒNG
+      // Chỉ load khi là phòng
       getRoomChatMes(selected.name, 1);
     }
   }, [selected]);
-
-  // Tạo phòng
-  const handleCreateRoom = (name: string) => {
-    createRoom(name);
-    console.log("Đã gửi yêu cầu tạo phòng:", name);
-  };
-
-  const handleJoinRoom = (name: string) => {
-    joinRoom(name);
-
-    console.log("Đã gửi yêu cầu tham gia phòng:", name);
-  };
 
   return (
     <div className="chat-container">
@@ -271,6 +344,8 @@ const ChatApp = () => {
         getAvatarGradient={getAvatarGradient}
         onCreateRoom={handleCreateRoom}
         onJoinRoom={handleJoinRoom}
+        onSearchUser={handleSearchUser}
+        onStartChat={handleStartChat}
       />
 
       {/* Khu vực chat */}
