@@ -25,7 +25,7 @@ export function sendChatToPeople(to: string, mes: string) {
   });
 }
 
-// gửi ảnh
+// Gửi ảnh
 export async function uploadImage(file: File): Promise<string> {
   const form = new FormData();
   form.append("file", file);
@@ -33,11 +33,11 @@ export async function uploadImage(file: File): Promise<string> {
   form.append("cloud_name", "dhfjendel");
 
   const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dhfjendel/image/upload",
-      {
-        method: "POST",
-        body: form,
-      }
+    "https://api.cloudinary.com/v1_1/dhfjendel/image/upload",
+    {
+      method: "POST",
+      body: form,
+    }
   );
 
   const data = await res.json();

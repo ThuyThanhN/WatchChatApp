@@ -14,6 +14,8 @@ type Props = {
   getAvatarGradient: (hsl: string) => string;
   onCreateRoom: (name: string) => void;
   onJoinRoom: (name: string) => void;
+  onSearchUser: (username: string) => void; // API CHECK_USER_EXIST
+  onStartChat: (username: string) => void; // tạo chat FE
 };
 
 const Sidebar = ({
@@ -25,10 +27,12 @@ const Sidebar = ({
   getAvatarGradient,
   onCreateRoom,
   onJoinRoom,
+  onSearchUser,
 }: Props) => {
   const [roomName, setRoomName] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [showJoin, setShowJoin] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const create = () => {
     if (!roomName.trim()) return;
@@ -66,9 +70,20 @@ const Sidebar = ({
         </div>
       </div>
 
+      {/* SEARCH */}
       <div className="search-container">
         <Search size={18} className="search-icon" />
-        <input className="search-input" placeholder="Tên người dùng..." />
+        <input
+          className="search-input"
+          placeholder="Tìm kiếm người dùng..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && searchText.trim()) {
+              onSearchUser(searchText.trim());
+            }
+          }}
+        />
       </div>
 
       {/* UI tạo phòng */}
