@@ -44,6 +44,18 @@ export async function uploadImage(file: File): Promise<string> {
 
   return data.secure_url;
 }
-
+// Lấy lịch sử tin nhắn riêng
+export function getPeopleChatMes(name: string, page = 1) {
+  sendJson({
+    action: "onchat",
+    data: {
+      event: "GET_PEOPLE_CHAT_MES",
+      data: {
+        name: name,
+        page: page,
+      },
+    },
+  });
+}
 
 
