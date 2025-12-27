@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { getSocket, subscribeMessage } from "../services/wsClient";
-import { sendChatToPeople, getUserList } from "../services/chatApi";
+import { sendChatToPeople, getUserList, getPeopleChatMes } from "../services/chatApi";
 import {
   createRoom,
   sendChatToRoom,
@@ -275,6 +275,32 @@ const ChatApp = () => {
         setMessages(mapped);
       }
 
+      // GET_PEOPLE_CHAT_MES
+      if (msg.event === "GET_PEOPLE_CHAT_MES") {
+        const current = selectedRef.current;
+        if (!current) return;
+        if (current.type !== 0) return;
+
+        const history = msg.data;
+        if (!Array.isArray(history)) return;
+
+        const mapped: Message[] = history.map((m: any, index: number) => {
+          return {
+            id: `${index}`,
+            sender: m.name === CURRENT_USER ? "user" : "other",
+            name: m.name,
+            content: m.mes,
+            timestamp: new Date(m.createAt + "Z").toLocaleTimeString(),
+            type: (m.mes || "").startsWith("http") ? "image" : "text",
+          };
+        });
+
+        mapped.sort((a: any, b: any) => b.id - a.id);
+        mapped.forEach((m: any) => delete (m as any).id);
+
+        setMessages(mapped);
+      }
+
       /* SEND_CHAT */
       if (msg.event === "SEND_CHAT") {
         const current = selectedRef.current;
@@ -321,6 +347,10 @@ const ChatApp = () => {
 
     setMessages([]); // clear UI cũ
 
+    if (selected.type === 0) {
+      // chat cá nhân
+      getPeopleChatMes(selected.name, 1);
+    }
     if (selected.type === 1) {
       // Chỉ load khi là phòng
       getRoomChatMes(selected.name, 1);
